@@ -35,4 +35,6 @@ class Button:
     def draw_button(self):
         """Draw blank button and then draw message."""
         self.screen.fill(self.button_color, self.rect)
+        # 关键修复：每次绘制时更新文本位置
+        self.msg_image_rect.center = self.rect.center
         self.screen.blit(self.msg_image, self.msg_image_rect)

@@ -1,0 +1,32 @@
+{
+    "screen": {
+        "width": 1200,
+        "height": 800,
+        "bg_color": [216, 191, 216]
+    },
+    "ship": {
+        "speed": 1.5,
+        "limit": 3
+    },
+    "bullet": {
+        "width": 3,
+        "height": 15,
+        "color": [60, 60, 60],
+        "speed": 25,
+        "allowed": 10
+    },
+    "alien": {
+        "speed": 1.0,
+        "drop_speed": 10,
+        "points": 50
+    },
+    "game": {
+        "speedup_scale": 1.1,
+        "score_scale": 1.5
+    },
+    "sound": {
+        "enabled": true,
+        "music_volume": 0.3,
+        "effects_volume": 0.6
+    }
+}

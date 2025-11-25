@@ -1,0 +1,12 @@
+{
+    "high_score": 300,
+    "games_played": 0,
+    "total_score": 0,
+    "total_aliens_killed": 0,
+    "total_bullets_fired": 0,
+    "best_level": 1,
+    "game_history": [],
+    "settings": {
+        "sound_enabled": true
+    }
+}
