@@ -63,6 +63,16 @@
     frame=single,
 }
 
+\usepackage{hyperref}
+% 基本使用
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=cyan,
+    citecolor=green,
+    filecolor=magenta
+}
+
 % ============================================================
 %                      文档开始
 % ============================================================
@@ -104,7 +114,7 @@
     \item 添加配置文件系统，使游戏设置可自定义
     \item 改进图像显示，移除图片的白色背景以支持背景颜色设置
     \item 实现玩家游戏数据的持久化存储和统计功能
-    \item 添加了音效和背景音乐功能，并实验性的添加了一些音效
+    \item 添加音效和背景音乐功能，并实验性的添加了一些音效
 \end{enumerate}
 
 \section{项目概述 (Overview)}
@@ -112,18 +122,18 @@
 本项目基于GitHub上代码进行功能扩展，主要改进内容包括：
 
 \begin{enumerate}
-    \item: 配置文件系统 - 使用JSON格式存储游戏设置
-    \item: 图像处理 - 移除图片白色背景，支持自定义背景颜色
-    \item: 数据持久化 - 记录玩家游戏表现和统计数据
-    \item: 音乐和音效 - 添加了游戏的背景音乐和音效（出于版权考虑，这些代码没有上传到Github，仅保留了功能）
-    \item: 在Github上开发 - 地址为 https://github.com/ChaoFan996/Experiment-Report-Template-SZU/tree/main
+    \item 配置文件系统 - 使用JSON格式存储游戏设置
+    \item 图像处理 - 移除图片白色背景，支持自定义背景颜色
+    \item 数据持久化 - 记录玩家游戏表现和统计数据
+    \item 音乐和音效 - 添加了游戏的背景音乐和音效（出于版权考虑，这些素材没有上传到Github，仅保留了功能）
+    \item 在Github上开发 - \href{https://github.com/ChaoFan996/Experiment-Report-Template-SZU/tree/main}{link}
 \end{enumerate}
 
 \section{实现细节 (Implementations)}
 
 \subsection{配置文件系统}
 
-创建了\texttt{config.json}文件来存储游戏设置，包括屏幕尺寸、飞船速度、子弹属性、外星人属性等：
+创建了\texttt{config.json}文件来存储游戏设置，包括屏幕尺寸、飞船速度、子弹属性等：
 
 \begin{lstlisting}[language=Python, caption=配置文件示例]
 {
@@ -219,7 +229,7 @@ class DataManager:
 \subsection{存在问题}
 
 \begin{enumerate}
-    \item[] \textbf{已知bug}: 需要将一些已知bug做修复
+    \item[] \textbf{已知bug}: 需要修复一些已知bug
 \end{enumerate}
 
 \subsection{总结}
