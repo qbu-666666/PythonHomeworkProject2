@@ -26,6 +26,21 @@
 \usetikzlibrary{calc}    % 坐标计算
 \usepackage{verbatim}    % 显示代码块
 \usepackage{float}       % 控制图片浮动位置（[H]参数）
+\usepackage{listings}    % 代码显示
+\usepackage{xcolor}      % 颜色支持
+
+% ----------------------------
+% 代码显示设置
+% ----------------------------
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single
+}
 
 % ----------------------------
 % 页眉页脚设置
@@ -35,6 +50,18 @@
 \fancyhead[L]{深圳大学实验报告} % 左侧页眉文字
 \fancyhead[C]{} % 中间空
 \fancyhead[R]{} % 右侧空
+
+% ----------------------------
+% 代码显示设置
+% ----------------------------
+\lstset{
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+}
 
 % ============================================================
 %                      文档开始
@@ -48,16 +75,16 @@
 \begin{titlepage}
     \centering
     \vspace*{2cm}
-    \Huge{\textbf{深 \ 圳 \ 大 \ 学 \ 实 \ 验  \ 报 \ 告}}\\[1.5cm]
+    \Huge{\textbf{深 \ 圳 \ 大 \ 学 \ 实 \ 验 \ 报 \ 告}}\\[1.5cm]
     
-    \Large{课程名称：\underline{\hspace{8cm}}}\\[0.5cm]
-    \Large{项目名称：\underline{\hspace{8cm}}}\\[0.5cm]
-    \Large{学 \quad \quad 院：\underline{\hspace{8cm}}}\\[0.5cm]
-    \Large{专 \quad \quad 业：\underline{\hspace{8cm}}}\\[0.5cm]
-    \Large{指导教师：\underline{\hspace{8cm}}}\\[0.5cm]
-    \Large{报告人：\underline{\hspace{3cm}} \hspace{0.5cm} 学号：\underline{\hspace{3cm}}}\\[0.5cm]
-    \Large{实验时间：\underline{\hspace{8cm}}}\\[0.5cm]
-    \Large{提交时间：\underline{\hspace{8cm}}}\\[1.5cm]
+    \Large{课程名称：\underline{\makebox[6cm]{Python程序设计}}}\\[0.8cm]
+    \Large{项目名称：\underline{\makebox[6cm]{外星人入侵游戏改进}}}\\[0.8cm]
+    \Large{学 \qquad 院：\underline{\makebox[6cm]{人工智能学院}}}\\[0.8cm]
+    \Large{专 \qquad 业：\underline{\makebox[12cm]{计算机科学与技术(IEEE荣誉班)}}}\\[0.8cm]
+    \Large{指导教师：\underline{\makebox[6cm]{舒婷，樊超}}}\\[0.8cm]
+    \Large{报告人：\underline{\makebox[2.5cm]{姜顺元}} \quad 学号：\underline{\makebox[2.5cm]{2024401029}}}\\[0.8cm]
+    \Large{实验时间：\underline{\makebox[6cm]{2025年11月25日}}}\\[0.8cm]
+    \Large{提交时间：\underline{\makebox[6cm]{2025年11月26日}}}\\[2cm]
 
     \vfill
     \Large{教务处制}
@@ -68,51 +95,136 @@
 % ============================================================
 % 正文部分
 % ============================================================
-% Experiment Objectives
 
+\section{实验目标 (Objectives)}
 
-\section{Objectives}
+本次实验的目标是基于Github上已有代码进行功能扩展和改进。主要目标包括：
 
-Describe the goal of the experiment, including what you aim to achieve (e.g., testing an algorithm, solving a problem, or exploring a concept).
-
-
-% Experiment Process
-\section{Overview}
-Briefly outline the approach and methods used in the experiment.
 \begin{enumerate}
-    \item[Spot 1]: xxx;
-    \item[Spot 2]: xxx;
-    \item[Spot 3]: xxx;
+    \item 添加配置文件系统，使游戏设置可自定义
+    \item 改进图像显示，移除图片的白色背景以支持背景颜色设置
+    \item 实现玩家游戏数据的持久化存储和统计功能
+    \item 添加了音效和背景音乐功能，并实验性的添加了一些音效
 \end{enumerate}
 
-% Figure
-\begin{figure}[t]
+\section{项目概述 (Overview)}
+
+本项目基于GitHub上代码进行功能扩展，主要改进内容包括：
+
+\begin{enumerate}
+    \item: 配置文件系统 - 使用JSON格式存储游戏设置
+    \item: 图像处理 - 移除图片白色背景，支持自定义背景颜色
+    \item: 数据持久化 - 记录玩家游戏表现和统计数据
+    \item: 音乐和音效 - 添加了游戏的背景音乐和音效（出于版权考虑，这些代码没有上传到Github，仅保留了功能）
+    \item: 在Github上开发 - 地址为 https://github.com/ChaoFan996/Experiment-Report-Template-SZU/tree/main
+\end{enumerate}
+
+\section{实现细节 (Implementations)}
+
+\subsection{配置文件系统}
+
+创建了\texttt{config.json}文件来存储游戏设置，包括屏幕尺寸、飞船速度、子弹属性、外星人属性等：
+
+\begin{lstlisting}[language=Python, caption=配置文件示例]
+{
+    "screen": {
+        "width": 1200,
+        "height": 800,
+        "bg_color": [216, 191, 216]
+    },
+    "ship": {
+        "speed": 1.5,
+        "limit": 3
+    },
+    "bullet": {
+        "width": 3,
+        "height": 15,
+        "color": [60, 60, 60],
+        "speed": 25,
+        "allowed": 10
+    }
+}
+\end{lstlisting}
+
+\subsection{数据持久化}
+
+使用\texttt{data\_manager.py}来管理游戏数据的存储和读取：
+
+\begin{lstlisting}[language=Python, caption=数据管理器]
+class DataManager:
+    def __init__(self, filename='game_data.json'):
+        self.filename = filename
+        self.data = self._load_data()
+    
+    def add_game_session(self, score, level, aliens_killed, bullets_fired, ships_left):
+        # 记录游戏会话数据
+        session_data = {
+            "date": datetime.now().strftime(...),
+            "score": score,
+            "level": level,
+            "aliens_killed": aliens_killed
+        }
+\end{lstlisting}
+
+\section{实验结果 (Results)}
+
+\subsection{功能测试结果}
+
+\begin{enumerate}
+    \item \textbf{配置文件功能}: 成功实现游戏设置的动态加载和保存，玩家可以自定义游戏参数
+    \item \textbf{背景颜色}: 成功移除图片白色背景，支持多种背景颜色显示
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.3\linewidth]{figs/imageimprove.png}
+        \caption{去除背景的游戏素材图片}
+        \label{fig:game-screenshot}
+    \end{figure}
+    \item \textbf{GUI设置界面}: 设置面板正常运行，包含速度调节、音量控制等功能
+    \item \textbf{数据统计}: 游戏数据正确记录和显示，包含最高分、平均分等统计信息
+\end{enumerate}
+
+\subsection{界面展示}
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\linewidth]{figs/vit_overview.png}
-    \caption{xxx}
-    \label{fig:vit-arch}
+    \includegraphics[width=0.3\linewidth]{figs/gamedisplay.png}
+    \caption{游戏运行截图（浅紫色背景）}
+    \label{fig:game-screenshot}
 \end{figure}
 
-% Implementation Details
-\section{Implementations}
-Provide a high-level overview of the key parts of your code.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\linewidth]{figs/statsdisplay.png}
+    \caption{统计数据界面}
+    \label{fig:game-screenshot}
+\end{figure}
 
-As shown in Figure.~\ref{fig:vit-arch}, xxx: 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\linewidth]{figs/settingsdisplay.png}
+    \caption{设置展示界面截图}
+    \label{fig:game-screenshot}
+\end{figure}
+
+\section{讨论与分析 (Discussion)}
+
+\subsection{技术亮点}
+
 \begin{enumerate}
-    \item[Part 1]: xxx;
-    \item[Part 2]: xxx;
-    \item[Part 3]: xxx;
+    \item \textbf{模块化设计}: 将配置管理、数据持久化、GUI界面等功能分离为独立模块
+    \item \textbf{用户体验}: 通过GUI设置界面提升了游戏的可配置性和易用性
+    \item \textbf{数据可视化}: 统计界面直观展示玩家游戏表现，增强游戏趣味性
 \end{enumerate}
 
-\section{Results}
+\subsection{存在问题}
 
-Present the output generated by your program. 
-Include any test cases, screenshots, or tables of results.
+\begin{enumerate}
+    \item[] \textbf{已知bug}: 需要将一些已知bug做修复
+\end{enumerate}
 
-\section{Discussion}
+\subsection{总结}
 
-Analyze the performance of your program. 
-Discuss any errors, inefficiencies, or areas for improvement. 
+本次实验实现了对外星人入侵游戏的多项功能改进。项目展示了Python在游戏开发中的应用能力，较好地完成了实验所要求的功能。同时，项目在Github上开发，使用本地的git提交代码。
 
 \newpage
 

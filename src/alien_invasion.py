@@ -13,84 +13,6 @@ from alien import Alien
 from sound import SoundManager
 from data_manager import DataManager
 
-
-class Slider:
-    """滑动条组件"""
-    def __init__(self, x, y, width, height, min_val, max_val, initial_val, label):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.knob_radius = 15
-        self.min_val = min_val
-        self.max_val = max_val
-        self.value = initial_val
-        self.label = label
-        self.dragging = False
-        
-        # 初始化字体
-        try:
-            self.font = pygame.font.SysFont("simsun", 28)
-        except:
-            try:
-                self.font = pygame.font.SysFont("microsoftyahei", 28)
-            except:
-                self.font = pygame.font.SysFont(None, 28)
-        
-        # 计算初始滑块位置
-        self.knob_x = x + (initial_val - min_val) / (max_val - min_val) * width
-        
-    def draw(self, screen):
-        # 绘制轨道
-        pygame.draw.rect(screen, (100, 100, 100), self.rect, border_radius=5)
-        
-        # 绘制滑块
-        knob_pos = (int(self.knob_x), self.rect.centery)
-        pygame.draw.circle(screen, (70, 130, 180), knob_pos, self.knob_radius)
-        pygame.draw.circle(screen, (255, 255, 255), knob_pos, self.knob_radius - 3, 2)
-        
-        # 绘制标签和值
-        label_text = self.font.render(f"{self.label}: {self.value:.1f}", True, (255, 255, 255))
-        screen.blit(label_text, (self.rect.x, self.rect.y - 30))
-        
-    def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if (self.knob_x - self.knob_radius <= event.pos[0] <= self.knob_x + self.knob_radius and
-                self.rect.y - self.knob_radius <= event.pos[1] <= self.rect.y + self.knob_radius):
-                self.dragging = True
-                
-        elif event.type == pygame.MOUSEBUTTONUP:
-            self.dragging = False
-            
-        elif event.type == pygame.MOUSEMOTION and self.dragging:
-            # 更新滑块位置
-            self.knob_x = max(self.rect.left, min(event.pos[0], self.rect.right))
-            
-            # 计算值
-            ratio = (self.knob_x - self.rect.left) / self.rect.width
-            self.value = self.min_val + ratio * (self.max_val - self.min_val)
-            return True
-            
-        return False
-        
-    def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if (self.knob_x - self.knob_radius <= event.pos[0] <= self.knob_x + self.knob_radius and
-                self.rect.y - self.knob_radius <= event.pos[1] <= self.rect.y + self.knob_radius):
-                self.dragging = True
-                
-        elif event.type == pygame.MOUSEBUTTONUP:
-            self.dragging = False
-            
-        elif event.type == pygame.MOUSEMOTION and self.dragging:
-            # 更新滑块位置
-            self.knob_x = max(self.rect.left, min(event.pos[0], self.rect.right))
-            
-            # 计算值
-            ratio = (self.knob_x - self.rect.left) / self.rect.width
-            self.value = self.min_val + ratio * (self.max_val - self.min_val)
-            return True
-            
-        return False
-
-
 class SettingsGUI:
     """设置GUI主类"""
     def __init__(self, ai_game):
@@ -107,213 +29,119 @@ class SettingsGUI:
         self._create_ui_components()
         
     def _init_fonts(self):
-        """初始化字体"""
+        """Initialize fonts"""
         try:
-            # 尝试使用系统中可能存在的支持中文的字体
-            self.title_font = pygame.font.SysFont("simsun", 48)  # 宋体
-            self.font = pygame.font.SysFont("simsun", 28)        # 宋体
-            self.small_font = pygame.font.SysFont("simsun", 24)  # 宋体
+            # 使用Consolas等宽字体
+            self.title_font = pygame.font.SysFont("Consolas", 36, bold=True)
+            self.font = pygame.font.SysFont("Consolas", 24)
+            self.small_font = pygame.font.SysFont("Consolas", 18)
         except:
-            try:
-                # 如果simsun不可用，尝试其他中文字体
-                self.title_font = pygame.font.SysFont("microsoftyahei", 48)  # 微软雅黑
-                self.font = pygame.font.SysFont("microsoftyahei", 28)
-                self.small_font = pygame.font.SysFont("microsoftyahei", 24)
-            except:
-                try:
-                    # 如果还不行，尝试使用Arial Unicode MS
-                    self.title_font = pygame.font.SysFont("arialunicodems", 48)
-                    self.font = pygame.font.SysFont("arialunicodems", 28)
-                    self.small_font = pygame.font.SysFont("arialunicodems", 24)
-                except:
-                    # 最后使用默认字体
-                    self.title_font = pygame.font.SysFont(None, 48)
-                    self.font = pygame.font.SysFont(None, 28)
-                    self.small_font = pygame.font.SysFont(None, 24)
-                    print("警告: 使用默认字体，中文可能显示为方块")
+            # 如果Consolas不可用，使用默认字体
+            self.title_font = pygame.font.SysFont(None, 36, bold=True)
+            self.font = pygame.font.SysFont(None, 24)
+            self.small_font = pygame.font.SysFont(None, 18)
         
     def _create_ui_components(self):
         screen_width = self.settings.screen_width
         screen_height = self.settings.screen_height
         
-        # 计算面板位置（居中）
-        panel_width = 500
-        panel_height = 500
+        # Calculate panel position (centered)
+        panel_width = 600
+        panel_height = 650
         panel_x = (screen_width - panel_width) // 2
         panel_y = (screen_height - panel_height) // 2
         
-        # 创建滑动条
-        slider_x = panel_x + 50
-        slider_y = panel_y + 80
-        slider_width = 400
-        
-        self.ship_speed_slider = Slider(slider_x, slider_y, slider_width, 10, 0.5, 3.0, 
-                                       self.settings.ship_speed, "飞船速度")
-        
-        self.bullet_speed_slider = Slider(slider_x, slider_y + 60, slider_width, 10, 1.0, 10.0,
-                                         self.settings.bullet_speed, "子弹速度")
-        
-        self.alien_speed_slider = Slider(slider_x, slider_y + 120, slider_width, 10, 0.5, 3.0,
-                                        self.settings.alien_speed, "外星人速度")
-        
-        self.music_volume_slider = Slider(slider_x, slider_y + 180, slider_width, 10, 0.0, 1.0,
-                                         self.settings.music_volume, "音乐音量")
-        
-        self.effects_volume_slider = Slider(slider_x, slider_y + 240, slider_width, 10, 0.0, 1.0,
-                                           self.settings.effects_volume, "音效音量")
-        
-        # 创建复选框
-        checkbox_y = slider_y + 300
-        self.sound_checkbox_rect = pygame.Rect(slider_x, checkbox_y, 20, 20)
-        self.sound_checkbox_checked = self.settings.sound_enabled
-        
-        # 创建按钮
-        button_y = panel_y + panel_height - 60
-        self.apply_button_rect = pygame.Rect(slider_x, button_y, 120, 40)
-        self.cancel_button_rect = pygame.Rect(slider_x + 140, button_y, 120, 40)
-        self.reset_button_rect = pygame.Rect(slider_x + 280, button_y, 120, 40)
-        
-        # 存储面板尺寸用于绘制背景
+        # Store panel dimensions for background drawing
         self.panel_rect = pygame.Rect(panel_x - 20, panel_y - 20, panel_width + 40, panel_height + 40)
         
     def draw(self):
         if not self.visible:
             return
             
-        # 绘制半透明背景
+        # Draw semi-transparent background
         overlay = pygame.Surface((self.settings.screen_width, self.settings.screen_height), pygame.SRCALPHA)
-        overlay.fill((0, 0, 0, 180))  # 半透明黑色
+        overlay.fill((0, 0, 0, 180))  # Semi-transparent black
         self.screen.blit(overlay, (0, 0))
         
-        # 绘制面板背景
+        # Draw panel background
         pygame.draw.rect(self.screen, (50, 50, 70), self.panel_rect, border_radius=15)
         pygame.draw.rect(self.screen, (100, 100, 130), self.panel_rect, 3, border_radius=15)
         
-        # 绘制标题
-        title_text = self.title_font.render("游戏设置", True, (255, 255, 255))
+        # Draw title
+        title_text = self.title_font.render("Game Settings", True, (255, 255, 255))
         title_rect = title_text.get_rect(center=(self.panel_rect.centerx, self.panel_rect.y + 40))
         self.screen.blit(title_text, title_rect)
         
-        # 绘制所有UI组件
-        self.ship_speed_slider.draw(self.screen)
-        self.bullet_speed_slider.draw(self.screen)
-        self.alien_speed_slider.draw(self.screen)
-        self.music_volume_slider.draw(self.screen)
-        self.effects_volume_slider.draw(self.screen)
+        # Draw settings information with proper spacing
+        start_y = self.panel_rect.y + 90
+        line_height = 32
         
-        # 绘制复选框
-        pygame.draw.rect(self.screen, (200, 200, 200), self.sound_checkbox_rect, 2, border_radius=4)
-        if self.sound_checkbox_checked:
-            pygame.draw.rect(self.screen, (70, 130, 180), self.sound_checkbox_rect.inflate(-8, -8), border_radius=2)
-        label_text = self.font.render("启用音效", True, (255, 255, 255))
-        self.screen.blit(label_text, (self.sound_checkbox_rect.right + 10, self.sound_checkbox_rect.y))
+        settings_info = [
+            f"Ship Speed:          {self.settings.ship_speed:.1f}",
+            f"Bullet Speed:        {self.settings.bullet_speed:.1f}",
+            f"Bullets Allowed:     {self.settings.bullets_allowed}",
+            f"Alien Speed:         {self.settings.alien_speed:.1f}",
+            f"Alien Points:        {self.settings.alien_points}",
+            f"Ship Limit:          {self.settings.ship_limit}",
+            f"Fleet Drop Speed:    {self.settings.fleet_drop_speed}",
+            f"Speedup Scale:       {self.settings.speedup_scale:.1f}",
+            f"Score Scale:         {self.settings.score_scale:.1f}",
+            f"Music Volume:        {self.settings.music_volume:.1f}",
+            f"Effects Volume:      {self.settings.effects_volume:.1f}",
+            f"Sound Enabled:       {'Yes' if self.settings.sound_enabled else 'No'}",
+            f"Screen Size:         {self.settings.screen_width} x {self.settings.screen_height}",
+            f"Background Color:    {self.settings.bg_color}"
+        ]
         
-        # 绘制按钮
-        pygame.draw.rect(self.screen, (0, 135, 0), self.apply_button_rect, border_radius=8)
-        pygame.draw.rect(self.screen, (255, 255, 255), self.apply_button_rect, 2, border_radius=8)
-        apply_text = self.font.render("应用", True, (255, 255, 255))
-        apply_rect = apply_text.get_rect(center=self.apply_button_rect.center)
-        self.screen.blit(apply_text, apply_rect)
+        for i, info in enumerate(settings_info):
+            text_surface = self.font.render(info, True, (255, 255, 255))
+            text_rect = text_surface.get_rect(midleft=(self.panel_rect.x + 40, start_y + i * line_height))
+            self.screen.blit(text_surface, text_rect)
         
-        pygame.draw.rect(self.screen, (180, 0, 0), self.cancel_button_rect, border_radius=8)
-        pygame.draw.rect(self.screen, (255, 255, 255), self.cancel_button_rect, 2, border_radius=8)
-        cancel_text = self.font.render("取消", True, (255, 255, 255))
-        cancel_rect = cancel_text.get_rect(center=self.cancel_button_rect.center)
-        self.screen.blit(cancel_text, cancel_rect)
+        # Draw separator line
+        separator_y = start_y + len(settings_info) * line_height + 20
+        pygame.draw.line(self.screen, (100, 100, 100), 
+                        (self.panel_rect.x + 40, separator_y),
+                        (self.panel_rect.x + self.panel_rect.width - 40, separator_y), 2)
         
-        pygame.draw.rect(self.screen, (180, 100, 0), self.reset_button_rect, border_radius=8)
-        pygame.draw.rect(self.screen, (255, 255, 255), self.reset_button_rect, 2, border_radius=8)
-        reset_text = self.font.render("重置默认", True, (255, 255, 255))
-        reset_rect = reset_text.get_rect(center=self.reset_button_rect.center)
-        self.screen.blit(reset_text, reset_rect)
+        # Draw instructions with more space
+        instructions = [
+            "Note: To change settings, please edit the config.json file",
+            "located in the game directory. You can modify values."
+        ]
+        
+        instructions_y = separator_y + 30
+        for i, instruction in enumerate(instructions):
+            color = (180, 180, 255) if i < 2 else (200, 200, 200)
+            text_surface = self.small_font.render(instruction, True, color)
+            text_rect = text_surface.get_rect(center=(self.panel_rect.centerx, instructions_y + i * 22))
+            self.screen.blit(text_surface, text_rect)
         
     def handle_event(self, event):
         if not self.visible:
             return False
             
-        # 处理所有UI组件的事件
+        # Handle close events
         if event.type == pygame.MOUSEBUTTONDOWN:
-            # 检查是否点击了面板外部（关闭设置）
+            # Check if clicked outside panel (close settings)
             if not self.panel_rect.collidepoint(event.pos):
                 self.hide()
                 return True
                 
-            # 处理复选框
-            if self.sound_checkbox_rect.collidepoint(event.pos):
-                self.sound_checkbox_checked = not self.sound_checkbox_checked
-                return True
-                
-            # 处理按钮
-            if self.apply_button_rect.collidepoint(event.pos):
-                self.apply_settings()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
                 self.hide()
                 return True
-            elif self.cancel_button_rect.collidepoint(event.pos):
-                self.hide()
-                return True
-            elif self.reset_button_rect.collidepoint(event.pos):
-                self.reset_to_default()
-                return True
                 
-        # 处理滑动条
-        self.ship_speed_slider.handle_event(event)
-        self.bullet_speed_slider.handle_event(event)
-        self.alien_speed_slider.handle_event(event)
-        self.music_volume_slider.handle_event(event)
-        self.effects_volume_slider.handle_event(event)
-            
         return False
         
-    def apply_settings(self):
-        """应用设置到游戏"""
-        # 更新游戏设置
-        self.settings.ship_speed = self.ship_speed_slider.value
-        self.settings.bullet_speed = self.bullet_speed_slider.value
-        self.settings.alien_speed = self.alien_speed_slider.value
-        self.settings.music_volume = self.music_volume_slider.value
-        self.settings.effects_volume = self.effects_volume_slider.value
-        self.settings.sound_enabled = self.sound_checkbox_checked
-        
-        # 更新音效管理器
-        if hasattr(self.sound_manager, 'set_music_volume'):
-            self.sound_manager.set_music_volume(self.settings.music_volume)
-        if hasattr(self.sound_manager, 'set_volume'):
-            self.sound_manager.set_volume(self.settings.effects_volume)
-        
-        # 根据音效设置播放或暂停音乐
-        if self.settings.sound_enabled:
-            if hasattr(self.sound_manager, 'unpause_background_music'):
-                self.sound_manager.unpause_background_music()
-        else:
-            if hasattr(self.sound_manager, 'pause_background_music'):
-                self.sound_manager.pause_background_music()
-            
-        # 保存配置到文件
-        self.settings.save_config()
-        
-        print("设置已应用并保存")
-        
-    def reset_to_default(self):
-        """重置为默认设置"""
-        # 重新加载默认设置
-        self.settings = Settings()
-        self.ai_game.settings = self.settings
-        
-        # 重新创建UI组件以反映默认值
-        self._create_ui_components()
-        
-        print("已重置为默认设置")
-        
     def show(self):
-        """显示设置界面"""
+        """Show settings interface"""
         self.visible = True
-        # 刷新UI组件值
-        self._create_ui_components()
         
     def hide(self):
-        """隐藏设置界面"""
+        """Hide settings interface"""
         self.visible = False
-
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -695,19 +523,18 @@ class AlienInvasion:
         # 获取统计数据
         stats = self.data_manager.get_statistics()
         
-        # 尝试加载中文字体，如果失败则使用默认字体
+        # 使用Consolas字体
         try:
-            # 尝试使用系统中可能存在的支持中文的字体
-            title_font = pygame.font.SysFont("simsunnsimsun", 64)
-            font = pygame.font.SysFont("simsunnsimsun", 36)
-            small_font = pygame.font.SysFont("simsunnsimsun", 24)
-            hint_font = pygame.font.SysFont("simsunnsimsun", 28)
+            title_font = pygame.font.SysFont("Consolas", 48, bold=True)
+            font = pygame.font.SysFont("Consolas", 32)
+            small_font = pygame.font.SysFont("Consolas", 20)
+            hint_font = pygame.font.SysFont("Consolas", 24)
         except:
-            # 如果找不到中文字体，使用默认字体
-            title_font = pygame.font.SysFont(None, 64)
-            font = pygame.font.SysFont(None, 36)
-            small_font = pygame.font.SysFont(None, 24)
-            hint_font = pygame.font.SysFont(None, 28)
+            # 如果Consolas不可用，使用默认字体
+            title_font = pygame.font.SysFont(None, 48, bold=True)
+            font = pygame.font.SysFont(None, 32)
+            small_font = pygame.font.SysFont(None, 20)
+            hint_font = pygame.font.SysFont(None, 24)
         
         # 标题
         title = title_font.render("Game Statistics", True, (255, 255, 255))
@@ -746,6 +573,11 @@ class AlienInvasion:
             game_surface = small_font.render(game_text, True, (200, 200, 200))
             self.screen.blit(game_surface, (120, y_pos))
             y_pos += 30
+        
+        # 提示文字
+        hint_text = hint_font.render("Press ESC to return", True, (150, 150, 255))
+        hint_rect = hint_text.get_rect(center=(self.settings.screen_width // 2, self.settings.screen_height - 50))
+        self.screen.blit(hint_text, hint_rect)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""

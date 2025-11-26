@@ -19,8 +19,16 @@ class Scoreboard:
         self.stats = ai_game.stats
 
         # Font settings for scoring information.
-        self.text_color = (30, 30, 30)
-        self.font = pygame.font.SysFont(None, 48)
+        # 根据背景颜色动态选择文本颜色
+        bg_color = self.settings.bg_color
+        brightness = (bg_color[0] * 299 + bg_color[1] * 587 + bg_color[2] * 114) / 1000
+        self.text_color = (255, 255, 255) if brightness < 128 else (30, 30, 30)
+        
+        # 使用Consolas字体
+        try:
+            self.font = pygame.font.SysFont("Consolas", 48)
+        except:
+            self.font = pygame.font.SysFont(None, 48)
 
         # Prepare the initial score images.
         self.prep_score()

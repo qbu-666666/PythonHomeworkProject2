@@ -2,7 +2,7 @@
     "screen": {
         "width": 1200,
         "height": 800,
-        "bg_color": [216, 191, 216]
+        "bg_color": [230, 230, 250]
     },
     "ship": {
         "speed": 1.5,
