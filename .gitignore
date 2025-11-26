@@ -197,8 +197,6 @@ config.json  # 如果包含敏感信息或本地配置
 *.mp3
 *.wav
 *.ogg
-*.png
-*.jpg
 *.jpeg
 *.gif
 *.bmp
