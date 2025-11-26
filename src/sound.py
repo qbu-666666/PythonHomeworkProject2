@@ -1,3 +1,6 @@
+# Copyright (c) 2025 tree_division
+# Licensed under the MIT License
+
 import pygame
 import os
 

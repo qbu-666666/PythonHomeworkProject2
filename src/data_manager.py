@@ -1,4 +1,7 @@
-# data_manager.py
+# Copyright (c) 2025 tree_division
+# Licensed under the MIT License
+
+
 import json
 import os
 from datetime import datetime
