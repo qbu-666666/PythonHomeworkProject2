@@ -4,7 +4,7 @@
 % Produced by: Chao Fan and Kewei Ou, AI School of SZU
 % ============================================================
 
-\documentclass[a4paper,11pt]{article}
+\documentclass[a4paper,12pt]{article}
 
 % ----------------------------
 % 中文与字体支持
@@ -17,7 +17,7 @@
 % 页面设置与常用宏包
 % ----------------------------
 \usepackage{geometry}    % 页面边距控制
-\geometry{left=1in, right=1in, top=0.8in, bottom=0.8in}
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
 
 \usepackage{longtable}   % 支持长表格
 \usepackage{graphicx}    % 插入图片
@@ -26,21 +26,6 @@
 \usetikzlibrary{calc}    % 坐标计算
 \usepackage{verbatim}    % 显示代码块
 \usepackage{float}       % 控制图片浮动位置（[H]参数）
-\usepackage{listings}    % 代码显示
-\usepackage{xcolor}      % 颜色支持
-
-% ----------------------------
-% 代码显示设置
-% ----------------------------
-\lstset{
-    basicstyle=\ttfamily\small,
-    keywordstyle=\color{blue},
-    commentstyle=\color{green},
-    stringstyle=\color{red},
-    showstringspaces=false,
-    breaklines=true,
-    frame=single
-}
 
 % ----------------------------
 % 页眉页脚设置
@@ -50,28 +35,6 @@
 \fancyhead[L]{深圳大学实验报告} % 左侧页眉文字
 \fancyhead[C]{} % 中间空
 \fancyhead[R]{} % 右侧空
-
-% ----------------------------
-% 代码显示设置
-% ----------------------------
-\lstset{
-    keywordstyle=\color{blue},
-    commentstyle=\color{green},
-    stringstyle=\color{red},
-    showstringspaces=false,
-    breaklines=true,
-    frame=single,
-}
-
-\usepackage{hyperref}
-% 基本使用
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    urlcolor=cyan,
-    citecolor=green,
-    filecolor=magenta
-}
 
 % ============================================================
 %                      文档开始
@@ -92,9 +55,9 @@
     \Large{学 \qquad 院：\underline{\makebox[6cm]{人工智能学院}}}\\[0.6cm]
     \Large{专 \qquad 业：\underline{\makebox[10cm]{计算机科学与技术(IEEE荣誉班)}}}\\[0.6cm]
     \Large{指导教师：\underline{\makebox[6cm]{舒婷，樊超}}}\\[0.6cm]
-    \Large{报告人：\underline{\makebox[2.5cm]{姜顺元}} \quad 学号：\underline{\makebox[2.5cm]{2024401029}}}\\[0.6cm]
+    \Large{报告人：\underline{\makebox[2.5cm]{姜顺元}} \quad 学号：\underline{\makebox[3cm]{2024401029}}}\\[0.6cm]
     \Large{实验时间：\underline{\makebox[6cm]{2025年11月25日}}}\\[0.6cm]
-    \Large{提交时间：\underline{\makebox[6cm]{2025年11月26日}}}\\[1.5cm]
+    \Large{提交时间：\underline{\makebox[6cm]{2025年12月11日}}}\\[1.5cm]
 
     \vfill
     \Large{教务处制}
@@ -105,171 +68,121 @@
 % ============================================================
 % 正文部分
 % ============================================================
+% Experiment Objectives
 
-\section{实验目标 (Objectives)}
+\section{Objectives}
 
-本次实验的目标是基于Github上已有代码进行功能扩展和改进。主要目标包括：
-
+本实验基于原有的《外星人入侵》游戏基础版本，实现了游戏功能的系统化扩展与增强。主要目标包括：
 \begin{enumerate}
-    \item 添加配置文件系统，使游戏设置可自定义
-    \item 改进图像显示，移除图片的白色背景以支持背景颜色设置
-    \item 实现玩家游戏数据的持久化存储和统计功能
-    \item 添加音效和背景音乐功能，并实验性的添加了一些音效
+    \item 新增游戏数据持久化功能，支持游戏统计信息的保存与读取
+    \item 集成完整的音频系统，提供游戏音效和背景音乐
+    \item 开发用户友好的游戏设置界面和统计信息显示界面
+    \item 改进游戏配置管理系统，支持外部配置文件
+    \item 增强游戏交互体验，提供更多控制选项和UI改进
 \end{enumerate}
 
-\section{项目概述 (Overview)}
-
-本项目基于GitHub上代码进行功能扩展，主要改进内容包括：
-
+% Experiment Process
+\section{Overview}
+本实验采用模块化扩展策略，在原有游戏框架基础上添加了多个功能模块，整体实现思路如下：
 \begin{enumerate}
-    \item 配置文件系统 - 使用JSON格式存储游戏设置
-    \item 图像处理 - 移除图片白色背景，支持自定义背景颜色
-    \item 数据持久化 - 记录玩家游戏表现和统计数据
-    \item 音乐和音效 - 添加了游戏的背景音乐和音效（出于版权考虑，这些素材没有上传到Github，仅保留了功能）
-    \item 在Github上开发 - \href{https://github.com/ChaoFan996/Experiment-Report-Template-SZU/tree/main}{link}
+    \item[1.] \textbf{数据持久化模块}: 新增DataManager类实现游戏数据的存储管理
+    \item[2.] \textbf{音频系统模块}: 新增SoundManager类统一管理音频资源
+    \item[3.] \textbf{用户界面扩展}: 新增SettingsGUI类提供设置界面，扩展游戏UI
+    \item[4.] \textbf{配置管理增强}: 重构Settings类支持配置文件读写
+    \item[5.] \textbf{游戏逻辑扩展}: 增强GameStats类，改进AlienInvasion主类
+    \item[6.] \textbf{实践方式}: 代码在github上开发，报告用overleaf撰写并将LaTeX源码同步至github项目，项目地址为 https://github.com/qbu-666666/PythonHomeworkProject2
 \end{enumerate}
 
-\section{实现细节 (Implementations)}
-
-\subsection{项目分工与工作流程}
-
+% Figure - 修改为嵌入PDF文件
 \begin{figure}[H]
     \centering
-    \begin{tikzpicture}[
-        node distance=1.2cm,
-        box/.style={rectangle, draw=black, thick, minimum width=3cm, minimum height=0.8cm, text centered, rounded corners},
-        mywork/.style={rectangle, draw=red, thick, fill=red!10, minimum width=3cm, minimum height=0.8cm, text centered, rounded corners},
-        arrow/.style={->, >=stealth, thick}
-    ]
-    
-    % 节点定义
-    \node (start) [box] {项目启动};
-    \node (config) [mywork, below of=start] {配置文件系统开发};
-    \node (image) [mywork, below of=config] {图像背景处理};
-    \node (gui) [mywork, below of=image] {GUI设置界面实现};
-    \node (data) [mywork, below of=gui] {数据持久化模块};
-    \node (test) [box, below of=data] {系统集成测试};
-    \node (report) [mywork, below of=test] {实验报告撰写};
-    \node (end) [box, below of=report] {项目完成};
-    
-    % 连接箭头
-    \draw [arrow] (start) -- (config);
-    \draw [arrow] (config) -- (image);
-    \draw [arrow] (image) -- (gui);
-    \draw [arrow] (gui) -- (data);
-    \draw [arrow] (data) -- (test);
-    \draw [arrow] (test) -- (report);
-    \draw [arrow] (report) -- (end);
-    
-    \end{tikzpicture}
-    \caption{项目开发流程图（红色高亮部分为本人负责模块）}
-    \label{fig:workflow}
+    \includegraphics[width=0.80\linewidth]{framework.pdf}
+    \caption{项目的代码框架，红色部分为我的主要更新内容，灰色部分为一些小的修补，红色部分是我主要的新增内容，蓝色部分为一些辅助性的功能/内容更新}
+    \label{fig:framework}
 \end{figure}
 
-\subsection{配置文件系统}
+% Implementation Details
+\section{Implementations}
+如框架图\ref{fig:framework}所示，本次功能扩展主要包括以下模块的实现：
 
-创建了\texttt{config.json}文件来存储游戏设置，包括屏幕尺寸、飞船速度、子弹属性等：
+\subsection{新增模块与功能}
+\begin{itemize}
+    \item \textbf{DataManager类}: 实现游戏数据的JSON格式存储，包括高分记录、游戏统计、历史会话等
+    \item \textbf{SoundManager类}: 管理游戏音效和背景音乐的加载、播放、音量控制
+    \item \textbf{SettingsGUI类}: 提供游戏设置的可视化界面，展示当前配置参数
+    \item \textbf{配置系统重构}: Settings类支持从config.json文件读取配置，实现配置与代码分离
+    \item \textbf{统计界面功能}: AlienInvasion类新增\_draw\_statistics方法实现数据可视化
+    \item \textbf{自定义背景颜色} 将游戏素材图片背景改为透明，支持了自定义背景
+\end{itemize}
 
-\begin{lstlisting}[language=Python, caption=配置文件示例]
-{
-    "screen": {
-        "width": 1200,
-        "height": 800,
-        "bg_color": [216, 191, 216]
-    },
-    "ship": {
-        "speed": 1.5,
-        "limit": 3
-    },
-    "bullet": {
-        "width": 3,
-        "height": 15,
-        "color": [60, 60, 60],
-        "speed": 25,
-        "allowed": 10
-    }
-}
-\end{lstlisting}
+\subsection{原有模块的增强}
+\begin{itemize}
+    \item \textbf{AlienInvasion类扩展}: 新增数据管理、音频管理、UI界面集成
+    \item \textbf{GameStats类扩展}: 增加游戏统计追踪功能，记录子弹数、击杀数等详细数据
+    \item \textbf{Scoreboard类改进}: 实现根据背景颜色动态调整文本颜色
+    \item \textbf{Button类改进}: 优化按钮绘制机制，支持Consolas字体
+\end{itemize}
 
-\subsection{数据持久化}
-
-使用\texttt{data\_manager.py}来管理游戏数据的存储和读取：
-
-\begin{lstlisting}[language=Python, caption=数据管理器]
-class DataManager:
-    def __init__(self, filename='game_data.json'):
-        self.filename = filename
-        self.data = self._load_data()
-    
-    def add_game_session(self, score, level, aliens_killed, bullets_fired, ships_left):
-        # 记录游戏会话数据
-        session_data = {
-            "date": datetime.now().strftime(...),
-            "score": score,
-            "level": level,
-            "aliens_killed": aliens_killed
-        }
-\end{lstlisting}
-
-\section{实验结果 (Results)}
-
-\subsection{功能测试结果}
-
+\subsection{主要新增功能点}
 \begin{enumerate}
-    \item \textbf{配置文件功能}: 成功实现游戏设置的动态加载和保存，玩家可以自定义游戏参数
-    \item \textbf{背景颜色}: 成功移除图片白色背景，支持多种背景颜色显示
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.25\linewidth]{figs/imageimprove.png}
-        \caption{去除背景的游戏素材图片}
-        \label{fig:game-screenshot}
-    \end{figure}
-    \item \textbf{GUI设置界面}: 设置面板正常运行，包含速度调节、音量控制等功能
-    \item \textbf{数据统计}: 游戏数据正确记录和显示，包含最高分、平均分等统计信息
+    \item \textbf{数据持久化}: 游戏退出自动保存，历史记录可追溯
+    \item \textbf{音频系统}: 背景音乐循环播放，游戏事件触发相应音效
+    \item \textbf{设置管理}: 可视化设置界面，支持配置文件的动态加载与保存
+    \item \textbf{统计信息}: 游戏数据统计分析界面，展示历史战绩
+    \item \textbf{UI优化}: 新增Stats和Settings按钮，改进用户交互
 \end{enumerate}
 
-\subsection{界面展示}
+\section{Results}
 
-\begin{figure}[H]
-    \centering
-    \begin{minipage}{0.3\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figs/gamedisplay.png}
-        \caption{游戏运行截图}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.3\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figs/statsdisplay.png}
-        \caption{统计数据界面}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.3\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figs/settingsdisplay.png}
-        \caption{设置展示界面}
-    \end{minipage}
-\end{figure}
-
-\section{讨论与分析 (Discussion)}
-
-\subsection{技术亮点}
-
+功能扩展后的游戏运行结果如下：
 \begin{enumerate}
-    \item \textbf{模块化设计}: 将配置管理、数据持久化、GUI界面等功能分离为独立模块
-    \item \textbf{用户体验}: 通过GUI设置界面提升了游戏的可配置性和易用性
-    \item \textbf{数据可视化}: 统计界面直观展示玩家游戏表现，增强游戏趣味性
+    \item \textbf{主界面变化}: 游戏主菜单新增"Stats"和"Settings"按钮，提供更多功能入口
+    \item \textbf{设置功能}: 点击Settings按钮或按Tab键可打开设置面板，查看当前游戏配置
+    \item \textbf{统计功能}: 点击Stats按钮或按S键显示详细游戏统计数据和分析报告
+    \item \textbf{音频效果}: 游戏具备完整的音效系统，包括射击、爆炸、升级等音效
+    \item \textbf{数据保存}: 游戏数据自动保存，历史记录可长期保存
+    \item \textbf{配置灵活}: 通过修改config.json文件可调整游戏参数
 \end{enumerate}
 
-\subsection{存在问题}
+\textbf{新增快捷键功能}:
+\begin{itemize}
+    \item F1键：重新加载配置文件
+    \item F2键：保存当前设置
+    \item Tab键：打开设置界面
+    \item ESC键：退出当前界面
+\end{itemize}
 
-\begin{enumerate}
-    \item[] \textbf{已知bug}: 需要修复一些已知bug
-\end{enumerate}
+\section{Discussion}
 
-\subsection{总结}
+\subsection{系统设计与架构}
+\begin{itemize}
+    \item \textbf{模块化设计}: 各功能模块职责明确，耦合度低，便于维护和扩展
+    \item \textbf{可扩展性}: 框架设计支持未来继续添加新功能模块
+    \item \textbf{用户体验}: 新增的界面和功能显著提升了游戏的可操作性和信息透明度
+    \item \textbf{数据管理}: 将游戏数据与配置数据分离管理，提高系统稳定性
+\end{itemize}
 
-本次实验实现了对外星人入侵游戏的多项功能改进。项目展示了Python在游戏开发中的应用能力，较好地完成了实验所要求的功能。同时，项目在Github上开发，使用本地的git提交代码。
+\subsection{潜在改进方向}
+\begin{itemize}
+    \item \textbf{界面美观性}: 当前界面较为基础，可进一步优化视觉效果
+    \item \textbf{功能完整性}: 可考虑添加成就系统、排行榜等社交功能
+    \item \textbf{跨平台支持}: 优化路径和音频处理，提高跨平台兼容性
+    \item \textbf{性能优化}: 大型历史数据加载时可能有性能影响
+    \item \textbf{本地化支持}: 添加多语言界面，扩展用户群体
+    \item \textbf{bug修复}: pygame存在一些控制bug，可能需要换用其他工具进行修复，这一点在readme.md中有说明。
+\end{itemize}
+
+\subsection{实验总结}
+本次实验成功实现了《外星人入侵》游戏的多项功能扩展：
+\begin{itemize}
+    \item 构建了完整的数据持久化体系，使游戏具备长期可玩性
+    \item 集成了专业的音频系统，大幅提升了游戏体验
+    \item 开发了友好的用户界面，增强了游戏的可操作性和信息透明度
+    \item 实现了灵活的配置管理系统，方便游戏参数的调整
+    \item 改进了游戏控制机制，满足不同用户的操作需求
+\end{itemize}
+
+实验结果表明，模块化的功能扩展策略有效可行，为游戏开发提供了良好的扩展框架和实践经验。
 
 \newpage
 
@@ -280,31 +193,31 @@ class DataManager:
 % 绘制正文外框（包含批阅区域）
 \begin{tikzpicture}[remember picture, overlay]
   \draw[thick] 
-    ($(current page.north west)+(2cm,-2.5cm)$) 
+    ($(current page.north west)+(2cm,-3cm)$) 
     rectangle 
-    ($(current page.south east)+(-2cm,2cm)$);
+    ($(current page.south east)+(-2cm,2.5cm)$);
 \end{tikzpicture}
 
-\vspace{0.5cm}
+\vspace{1cm}
 
 % 批阅区
 \noindent \textbf{指导教师批阅意见：}
-\vspace{3cm}
+\vspace{5cm}
 \hfill
 
-\vspace{0.5cm}
+\vspace{1cm}
 
 \noindent \textbf{成绩评定：}
-\vspace{1.5cm}
+\vspace{2cm}
 \hfill
 
-\vspace{0.5cm}
+\vspace{1cm}
 
 \noindent \textbf{指导教师签字：}
-\vspace{1.5cm}
+\vspace{2cm}
 \hfill
 
-\vspace{0.5cm}
+\vspace{1cm}
 
 % 备注部分
 \noindent \textbf{备注：}

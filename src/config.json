@@ -2,7 +2,11 @@
     "screen": {
         "width": 1200,
         "height": 800,
-        "bg_color": [230, 230, 250]
+        "bg_color": [
+            230,
+            230,
+            250
+        ]
     },
     "ship": {
         "speed": 1.5,
@@ -11,7 +15,11 @@
     "bullet": {
         "width": 3,
         "height": 15,
-        "color": [60, 60, 60],
+        "color": [
+            60,
+            60,
+            60
+        ],
         "speed": 25,
         "allowed": 10
     },
